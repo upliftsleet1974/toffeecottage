@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <link rel="shortcut icon" href="assets/ico/favicon.ico">
+
+  <title>The Toffee Cottage - Home Made Candies for Any Ocassion</title>
+
+  <!-- Bootstrap core CSS -->
+  <link href="assets/css/bootstrap.css" rel="stylesheet">
+
+  <!-- Custom styles for this template -->
+  <link href="assets/css/style.css" rel="stylesheet">
+  <link href="assets/css/font-awesome.min.css" rel="stylesheet">
+
+
+  <!-- Just for debugging purposes. Don't actually copy this line! -->
+  <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+
+  <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!--[if lt IE 9]>
+  <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+  <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+  <![endif]-->
+
+  <script src="assets/js/modernizr.js"></script>
+
+  <style>
+  .ng-hide { display:none }
+  </style>
+
+</head>
+
+<body>
+
+  <!-- Fixed navbar -->
+  <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="index.html">The Toffee Cottage</a>
+      </div>
+      <div class="navbar-collapse collapse navbar-right">
+        <ul class="nav navbar-nav">
+          <li><a href="index.html">HOME</a></li>
+          <li><a href="about.html">ABOUT</a></li>
+          <li class="active"><a href="contact.html">CONTACT</a></li>
+        </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+	<!-- *****************************************************************************************************************
+	 BLUE WRAP
+	 ***************************************************************************************************************** -->
+	<div id="blue">
+	    <div class="container">
+			<div class="row">
+				<h3>Contact.</h3>
+			</div><!-- /row -->
+	    </div> <!-- /container -->
+	</div><!-- /blue -->
+
+
+	<!-- *****************************************************************************************************************
+	 CONTACT FORMS
+	 ***************************************************************************************************************** -->
+   <div class="container">
+     <div class="row">
+         <div ng-app="">
+           <div ng-controller="ContactCtrl">
+             <div class="form-group has-feedback" ng-class="{'has-success': isValid.email && isValid.checked, 'has-error': !isValid.email}">
+               <input ng-disabled="contactSent" class="form-control" ng-model="contact.email" placeholder="Email" ng-keydown="validate(contact)"/>
+               <span ng-show="isValid.checked" class="glyphicon form-control-feedback" ng-class="{'glyphicon-ok': isValid.email, 'glyphicon-remove': !isValid.email, 'glyphicon-send': contactSent === null}" aria-hidden="true"></span>
+             </div>
+             <div class="form-group" ng-class="{'has-success': contactSent}">
+               <textarea ng-disabled="contactSent || contactSent === null" class="form-control" ng-model="contact.message" placeholder="How can we assist you?" rows="7" ng-keydown="validate(contact)"></textarea>
+             </div>
+             <div class="form-group">
+               <button class="ng-hide btn" ng-show="isValid" ng-class="{'btn-success': contactSent, 'btn-primary': isValid.email}" ng-click="send(contact)" ng-disabled="!isValid.form || contactSent">{{ sendStatus() }}</button>
+             </div>
+           </div>
+         </div>
+     </div>
+   </div>
+
+
+	<!-- *****************************************************************************************************************
+	 FOOTER
+	 ***************************************************************************************************************** -->
+	 <div id="footerwrap">
+	 	<div class="container">
+		 	<div class="row">
+
+
+		 	</div><! --/row -->
+	 	</div><! --/container -->
+	 </div><! --/footerwrap -->
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="assets/js/bootstrap.min.js"></script>
+  	<script src="assets/js/retina-1.1.0.js"></script>
+  	<script src="assets/js/jquery.hoverdir.js"></script>
+  	<script src="assets/js/jquery.hoverex.min.js"></script>
+  	<script src="assets/js/jquery.prettyPhoto.js"></script>
+  	<script src="assets/js/jquery.isotope.min.js"></script>
+  	<script src="assets/js/custom.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.28/angular.js"></script>
+    <script src="https://cdn.firebase.com/js/client/2.1.2/firebase.js"></script>
+    <script>
+    function ContactCtrl($scope){
+      $scope.contact = { // starting contact values
+        email: "",
+        message: ""
+      };
+      $scope.isValid = {
+        email: true,
+        form: false,
+        checked: false // form has been checked
+      };
+      $scope.contactSent = false;
+
+      function isValidEmail(email) {
+        var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return re.test(email);
+      };
+
+
+      $scope.validate = function validate(contact) {
+        $scope.isValid.checked = true;
+        $scope.isValid.email = isValidEmail(contact.email);
+        $scope.isValid.form = $scope.isValid.email && contact.message.length > 2; // all of the conditions to be met for the form to be valid
+        return $scope.isValid.form;
+      };
+
+      $scope.send = function(contact) { // send the message
+        if (!$scope.contactSent && isValidEmail(contact.email)) {
+          $scope.contactSent = null;
+          var firebaseRef = new Firebase("https://redx-co.firebaseio.com/email"); // your firebase location here
+          firebaseRef.push($scope.contact, function complete() {
+            $scope.contactSent = true;
+            $scope.$apply();
+          });
+        };
+      };
+
+      $scope.sendStatus = function() {
+        switch ($scope.contactSent) {
+          case null: return 'Sending';
+          case true: return 'Sent';
+        }
+        return 'Send';
+      }
+
+    };
+    </script>
+
+
+  </body>
+</html>
